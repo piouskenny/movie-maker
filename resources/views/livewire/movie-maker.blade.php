@@ -8,68 +8,47 @@
     <div class="p-6 min-h-screen flex flex-col items-center mt-[10vh]">
         <h1 class="text-primary text-3xl text-center mb-6"> <span class="text-gray-800">Use</span> my Movie Maker to create your own great movie</h1>
 
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <form wire:submit.prevent="upload" class="space-y-4">
-                <div>
-                    <label for="videoUpload" class="block text-gray-700">Upload Video File</label>
-                    <input
-                        type="file"
-                        id="videoUpload"
-                        wire:model="videoFile"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-primary-light focus:border-primary-light sm:text-sm"
-                    >
-                    @error('videoFile')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+            <div class="mx-auto py-8">
+                <form wire:submit.prevent="submit" class="bg-white rounded px-8 pt-6 pb-8 mb-4">
 
-                <div>
-                    <button
-                        type="submit"
-                        class="w-full bg-primary-light text-white font-bold py-2 px-4 rounded hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-opacity-50"
-                    >
-                        Upload Video
-                    </button>
-                </div>
-            </form>
+                    <p class="block text-gray-700 text-sm mb-2">Step 1:Upload video to your google drive or Youtube, copy and paste the url below</p>
 
-            <form wire:submit.prevent="edit" class="space-y-4 mt-[20px]">
-                <div>
-                    <label for="videoId" class="block text-gray-700">Video url<label>
-                    <input
-                        type="text"
-                        id="videoId"
-                        wire:model="videoId"
-                        placeholder="Video ID"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-primary-light focus:border-primary-light sm:text-sm"
-                    >
-                    @error('videoId')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
+                    <div class="mb-6">
+                        <label for="videoUrl" class="block text-gray-700 text-sm font-bold mb-2">Video URL:</label>
+                        <input type="url" id="videoUrl" wire:model="videoUrl" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        @error('videoUrl') <span class="text-red-500 text-xs italic">{{ $message }}</span> @enderror
+                    </div>
 
-                <div>
-                    <label for="options" class="block text-gray-700">Editing Options (JSON)</label>
-                    <textarea
-                        id="options"
-                        wire:model="options"
-                        placeholder="Editing Options (JSON)"
-                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-primary-light focus:border-primary-light sm:text-sm"
-                    ></textarea>
-                    @error('options')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
-                    @enderror
-                </div>
+                    <div class="mb-6">
+                        <p class="block text-gray-700 text-sm mb-2">Step 2:Upload yout audio file to your google drive or Youtube, copy and paste the url below - </p>
+                        <label for="audioUrl" class="block text-gray-700 text-sm font-bold mb-2">Audio URL:</label>
+                        <input type="url" id="audioUrl" wire:model="audioUrl" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        @error('audioUrl') <span class="text-red-500 text-xs italic">{{ $message }}</span> @enderror
+                    </div>
 
-                <div>
-                    <button
-                        type="submit"
-                        class="w-full bg-primary-light text-white font-bold py-2 px-4 rounded hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary-light focus:ring-opacity-50"
-                    >
-                        Edit Video
-                    </button>
-                </div>
-            </form>
+
+
+                    <div class="mb-6">
+                        <p class="block text-gray-700 text-sm mb-2">Step 3: Add overlay text and click submit</p>
+                        <label for="overlayText" class="block text-gray-700 text-sm font-bold mb-2">Overlay Text:</label>
+                        <textarea id="overlayText" wire:model="overlayText" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                        @error('overlayText') <span class="text-red-500 text-xs italic">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+                    </div>
+                </form>
+
+                @if ($result)
+                    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                        <h3 class="text-gray-700 text-lg font-bold mb-4">Render Result:</h3>
+                        <pre class="whitespace-pre-wrap text-gray-700">{{ $result }}</pre>
+                    </div>
+                @endif
+            </div>
+
         </div>
     </div>
 

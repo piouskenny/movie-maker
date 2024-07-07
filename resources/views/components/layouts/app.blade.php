@@ -8,12 +8,16 @@
         <script src="https://cdn.tailwindcss.com"></script>
 
         <style>
-            .hero-bg {
-                background-image: url('https://videogram.co.uk/wp-content/uploads/2017/10/vg_banner_350_01a.jpg');
-                background-size: cover;
-                background-position: center;
-                height: 30vh;
-            }
+
+        .loader {
+            border-top-color: #3490dc;
+            animation: spinner 0.6s linear infinite;
+        }
+
+    @keyframes spinner {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
         </style>
 
     </head>

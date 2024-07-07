@@ -16,6 +16,7 @@ class MovieMaker extends Component
     public $audioUrl;
     public $overlayText;
     public $result;
+    public $loading = false;
 
     protected $rules = [
         'videoUrl' => 'required|url',
@@ -33,6 +34,8 @@ class MovieMaker extends Component
     public function submit()
     {
         $this->validate();
+
+        $this->loading = true;
 
         $client = new Client(env('CREATOMATE_API_KEY'));
 
@@ -74,7 +77,7 @@ class MovieMaker extends Component
             ]);
         }
 
-        $source = new \Creatomate\Source([
+        $source = new Source([
             'output_format' => 'mp4',
             'frame_rate' => 60,
             'emoji_style' => 'apple',
@@ -83,6 +86,7 @@ class MovieMaker extends Component
 
         $renders = $client->render(['source' => $source]);
 
-        $this->result = json_encode($renders, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+        $this->result = $renders[0]['url'];
+        $this->loading = false;
     }
 }

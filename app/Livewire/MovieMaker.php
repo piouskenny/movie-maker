@@ -9,6 +9,9 @@ use Creatomate\Elements\Audio;
 use Creatomate\Elements\Text;
 use Creatomate\Animations\TextSlide;
 use Creatomate\Source;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ConnectException;
+
 
 class MovieMaker extends Component
 {
@@ -17,11 +20,13 @@ class MovieMaker extends Component
     public $overlayText;
     public $result;
     public $loading = false;
+    public $errorMessage;
 
     protected $rules = [
         'videoUrl' => 'required|url',
         'audioUrl' => 'required|url',
         'overlayText' => 'nullable|string',
+        'maxDuration' => 'nullable|integer|min:1',
     ];
 
 
@@ -29,7 +34,6 @@ class MovieMaker extends Component
     {
         return view('livewire.movie-maker');
     }
-
 
     public function submit()
     {
@@ -42,6 +46,7 @@ class MovieMaker extends Component
         $elements = [
             new Video([
                 'source' => $this->videoUrl,
+                'trim_duration' => $this->maxDuration ? $this->maxDuration : null,
             ]),
             new Audio([
                 'source' => $this->audioUrl,
@@ -84,9 +89,20 @@ class MovieMaker extends Component
             'elements' => $elements,
         ]);
 
-        $renders = $client->render(['source' => $source]);
-
-        $this->result = $renders[0]['url'];
-        $this->loading = false;
+        try {
+            $renders = $client->render(['source' => $source]);
+            $this->result = $renders[0]['url'];
+        } catch (RequestException $e) {
+            // Handle request exceptions (e.g., 4xx and 5xx responses)
+            $this->addError('result', 'Error: ' . $e->getMessage());
+        } catch (ConnectException $e) {
+            // Handle connection exceptions (e.g., network issues)
+            $this->addError('result', 'Network Error: ' . $e->getMessage());
+        } catch (\Exception $e) {
+            // Handle any other exceptions
+            $this->addError('result', 'Unexpected Error: ' . $e->getMessage());
+        } finally {
+            $this->loading = false;
+        }
     }
 }

@@ -39,5 +39,11 @@
             variants: {},
             plugins: [],
         }
+
+        document.addEventListener('livewire:load', function () {
+            Livewire.on('videoGenerated', () => {
+                document.getElementById('result-section').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
       </script>
 </html>
